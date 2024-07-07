@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import SearchField from "./SearchField";
-import Logo from "./Logo";
-import NumberResults from "./NumberResults";
+import React from "react";
+import Logo from "../Helpers/Logo";
 
-function Navbar({ movies }) {
+function Navbar({ children }) {
   return (
     <nav className="nav-bar">
       <Logo />
-      <SearchField />
-      <NumberResults movies={movies} />
+      {children}
     </nav>
   );
 }

@@ -1,31 +1,22 @@
-import React, { useState } from "react";
-import { tempWatchedData } from "../Data/startingData";
+import React from "react";
+// import { tempWatchedData } from "../Data/startingData";
+// import ReusableBox from "../Helpers/ReusableBox";
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-function WatchedBox() {
-  const [isOpen2, setIsOpen2] = useState(true);
-  const [watched, setWatched] = useState(tempWatchedData);
+// function WatchedBox() {
+//   // const [isOpen2, setIsOpen2] = useState(true);
+//   const [watched, setWatched] = useState(tempWatchedData);
 
-  return (
-    <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
-      </button>
-      {isOpen2 && (
-        <>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
-        </>
-      )}
-    </div>
-  );
-}
+//   return (
+//     <ReusableBox>
+//       <WatchedSummary watched={watched} />
+//       <WatchedMoviesList watched={watched} />
+//     </ReusableBox>
+//   );
+// }
 
-function WatchedSummary({ watched }) {
+export function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
@@ -54,7 +45,7 @@ function WatchedSummary({ watched }) {
     </div>
   );
 }
-function WatchedMoviesList({ watched }) {
+export function WatchedMoviesList({ watched }) {
   return (
     <ul className="list">
       {watched.map((watchedMovieData) => (
@@ -88,4 +79,4 @@ function SingleWatchedMovie({ movie }) {
     </li>
   );
 }
-export default WatchedBox;
+// export default WatchedBox;
