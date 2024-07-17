@@ -4,7 +4,7 @@ function MoviesList({ movies }) {
   return (
     <ul className="list">
       {movies?.map((movieData) => (
-        <SingleMovie movie={movieData} key={movieData.id} />
+        <SingleMovie key={movieData.imdbID} movie={movieData} />
       ))}
     </ul>
   );
