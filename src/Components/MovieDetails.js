@@ -11,7 +11,7 @@ function MovieDetails({
   addLocal,
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const [movie, setMovie] = useState({});
   const [userRating, setUserRating] = useState(0);
   const {
@@ -35,7 +35,7 @@ function MovieDetails({
   )[0];
 
   function handleAdd() {
-    setError("");
+    // setError("");
 
     const newWatchedMovie = {
       imdbID: selectedId,
@@ -72,6 +72,30 @@ function MovieDetails({
       fetchMovieDetails();
     },
     [selectedId]
+  );
+  /// Event listener KeyPress ⤵️
+  useEffect(function () {
+    function callback(e) {
+      if (e.code == "Escape") {
+        onCloseMovie();
+      }
+    }
+    document.addEventListener("keydown", callback);
+
+    return function () {
+      document.removeEventListener("keydown", callback);
+    };
+  }, []);
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie | ${title}`;
+
+      return function () {
+        document.title = "Popcorn | Movies Site";
+      };
+    },
+    [title]
   );
   return (
     <>
