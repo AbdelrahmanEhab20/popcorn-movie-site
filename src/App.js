@@ -55,6 +55,13 @@ export default function App() {
   function handleAddedWatched(movie) {
     setWatched((watched) => [...watched, movie]);
   }
+  function handleDeleteMovie(id) {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+    // setData((data) => data.filter((movie) => movie.imdbID !== id));
+    const newItems = data.filter((movie) => movie.imdbID !== id);
+    setData(newItems);
+    localStorage.setItem("myData", JSON.stringify(newItems));
+  }
   useEffect(
     function () {
       async function fetchMovies() {
@@ -122,6 +129,7 @@ export default function App() {
                 watched={watched}
                 setWatched={setWatched}
                 dataLocal={data}
+                onDeleteMovie={handleDeleteMovie}
               />
             </>
           )}

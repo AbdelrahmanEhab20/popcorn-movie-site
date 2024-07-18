@@ -26,13 +26,14 @@ function MovieDetails({
     Director: director,
     Genre: genre,
   } = movie;
+
   const isWatched = watched
     .map((singleMOv) => singleMOv.imdbID)
     .includes(selectedId);
   const savedUserRating = watched.filter(
     (singleMOv) => singleMOv.imdbID === selectedId
   )[0];
-  console.log(savedUserRating);
+
   function handleAdd() {
     setError("");
 

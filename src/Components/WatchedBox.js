@@ -31,11 +31,11 @@ export function WatchedSummary({ watched }) {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating.toFixed(2)}</span>
+          <span>{avgImdbRating.toFixed(2)} imdb</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating.toFixed(2)}</span>
+          <span>{avgUserRating.toFixed(2)} user</span>
         </p>
         <p>
           <span>⏳</span>
@@ -45,8 +45,12 @@ export function WatchedSummary({ watched }) {
     </div>
   );
 }
-export function WatchedMoviesList({ watched, dataLocal, setWatched }) {
-  // console.log(dataLocal);
+export function WatchedMoviesList({
+  watched,
+  dataLocal,
+  setWatched,
+  onDeleteMovie,
+}) {
   setWatched(dataLocal);
   return (
     <ul className="list">
@@ -54,12 +58,13 @@ export function WatchedMoviesList({ watched, dataLocal, setWatched }) {
         <SingleWatchedMovie
           movie={watchedMovieData}
           key={watchedMovieData.imdbID}
+          onDeleteWatched={onDeleteMovie}
         />
       ))}
     </ul>
   );
 }
-function SingleWatchedMovie({ movie }) {
+function SingleWatchedMovie({ movie, onDeleteWatched }) {
   return (
     <li key={movie.imdbID}>
       <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -77,6 +82,12 @@ function SingleWatchedMovie({ movie }) {
           <span>⏳</span>
           <span>{movie.runtime} min</span>
         </p>
+        <button
+          className="btn-delete"
+          onClick={() => onDeleteWatched(movie.imdbID)}
+        >
+          X
+        </button>
       </div>
     </li>
   );
