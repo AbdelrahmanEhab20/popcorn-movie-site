@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import { tempWatchedData } from "../Data/startingData";
 // import ReusableBox from "../Helpers/ReusableBox";
 const average = (arr) =>
@@ -31,27 +31,29 @@ export function WatchedSummary({ watched }) {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p>
           <span>⏳</span>
-          <span>{avgRuntime} min</span>
+          <span>{avgRuntime.toFixed(2)} min</span>
         </p>
       </div>
     </div>
   );
 }
-export function WatchedMoviesList({ watched }) {
+export function WatchedMoviesList({ watched, dataLocal, setWatched }) {
+  // console.log(dataLocal);
+  setWatched(dataLocal);
   return (
     <ul className="list">
       {watched.map((watchedMovieData) => (
         <SingleWatchedMovie
           movie={watchedMovieData}
-          key={watchedMovieData.id}
+          key={watchedMovieData.imdbID}
         />
       ))}
     </ul>
@@ -60,8 +62,8 @@ export function WatchedMoviesList({ watched }) {
 function SingleWatchedMovie({ movie }) {
   return (
     <li key={movie.imdbID}>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+      <img src={movie.poster} alt={`${movie.title} poster`} />
+      <h3>{movie.title}</h3>
       <div>
         <p>
           <span>⭐️</span>

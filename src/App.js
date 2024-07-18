@@ -14,30 +14,46 @@ import MovieDetails from "./Components/MovieDetails";
 
 const KEY = "c989dcb0";
 export default function App() {
-  const [query, setQuery] = useState("inception");
+  const [query, setQuery] = useState("Green");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [error, setError] = useState("");
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Retrieve data from local storage when the component mounts
+    const storedData = localStorage.getItem("myData");
+    if (storedData) {
+      setData(JSON.parse(storedData));
+      // setWatched(data);
+    }
+  }, []);
+
+  const addData = (newItem) => {
+    if (data.map((singleMOv) => singleMOv.imdbID).includes(newItem.imdbID)) {
+      return;
+    }
+    const updatedData = [...data, newItem];
+    setData(updatedData);
+    localStorage.setItem("myData", JSON.stringify(updatedData));
+  };
+
   // ! http://www.omdbapi.com/?apikey=[yourkey]&
   // ?--> https://www.omdbapi.com/?i=tt3896198&apikey=c989dcb0
   // ! my KEY ⬆️
-  // const tempQuery = "Heat";
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${tempQuery}`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setMovies(data.Search);
-  //       setIsLoading(false);
-  //     });
-  // }, []);
+
   function handleSelectedMovie(id) {
     setSelectedId((selectedId) => (selectedId === id ? null : id));
   }
   function handleCloseSelectedMovie(id) {
     setSelectedId(null);
+  }
+  // ! Watched movies handler
+  function handleAddedWatched(movie) {
+    setWatched((watched) => [...watched, movie]);
   }
   useEffect(
     function () {
@@ -57,7 +73,6 @@ export default function App() {
           if (data.Response === "False") throw new Error("Movie not found !");
 
           setMovies(data.Search);
-          // setSelectedId(data.Search.imdbID);
           setError("");
         } catch (err) {
           console.log(err.message);
@@ -75,11 +90,6 @@ export default function App() {
     },
     [query]
   );
-  //   ! --------- old fetch data -------
-  // fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=Heat`)
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data));
-
   return (
     <>
       <Navbar>
@@ -99,13 +109,20 @@ export default function App() {
         <ReusableBox>
           {selectedId ? (
             <MovieDetails
+              addLocal={addData}
+              watched={watched}
               selectedId={selectedId}
               onCloseMovie={handleCloseSelectedMovie}
+              onAddedWatched={handleAddedWatched}
             />
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMoviesList watched={watched} />
+              <WatchedMoviesList
+                watched={watched}
+                setWatched={setWatched}
+                dataLocal={data}
+              />
             </>
           )}
         </ReusableBox>
