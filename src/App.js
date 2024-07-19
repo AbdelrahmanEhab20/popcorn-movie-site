@@ -12,6 +12,7 @@ import Loader from "./Helpers/Loader";
 import ErrorMessage from "./Helpers/ErrorMessage";
 import MovieDetails from "./Components/MovieDetails";
 import { useMovies } from "./hooks/useMovies";
+import { useLocalStorageState } from "./hooks/useLocalStorageState";
 
 const KEY = "c989dcb0";
 export default function App() {
@@ -28,10 +29,9 @@ export default function App() {
 
   // const [watched, setWatched] = useState([]);
   //!  another way for saving and getting data from local storage
-  const [watched, setWatched] = useState(function () {
-    const storedValue = localStorage.getItem("myData");
-    return JSON.parse(storedValue);
-  });
+
+  const [watched, setWatched] = useLocalStorageState([], "myData");
+
   // useEffect(() => {
   //   // Retrieve data from local storage when the component mounts
   //   const storedData = localStorage.getItem("myData");
@@ -86,12 +86,6 @@ export default function App() {
   // }, []);
   ///------
 
-  useEffect(
-    function () {
-      localStorage.setItem("myData", JSON.stringify(watched));
-    },
-    [watched]
-  );
   return (
     <>
       <Navbar>
