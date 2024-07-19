@@ -8,7 +8,7 @@ function MovieDetails({
   onCloseMovie,
   onAddedWatched,
   watched,
-  addLocal,
+  // addLocal,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState("");
@@ -52,7 +52,7 @@ function MovieDetails({
       userRating,
     };
     onAddedWatched(newWatchedMovie);
-    addLocal(newWatchedMovie);
+    // addLocal(newWatchedMovie);
     onCloseMovie();
   }
 

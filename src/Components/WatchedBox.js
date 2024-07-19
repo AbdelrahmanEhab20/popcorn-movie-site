@@ -47,11 +47,12 @@ export function WatchedSummary({ watched }) {
 }
 export function WatchedMoviesList({
   watched,
-  dataLocal,
+  // dataLocal,
   setWatched,
   onDeleteMovie,
+  onSelectMovie,
 }) {
-  setWatched(dataLocal);
+  // setWatched(dataLocal);
   return (
     <ul className="list">
       {watched.map((watchedMovieData) => (
@@ -59,14 +60,15 @@ export function WatchedMoviesList({
           movie={watchedMovieData}
           key={watchedMovieData.imdbID}
           onDeleteWatched={onDeleteMovie}
+          onSelectMovie={onSelectMovie}
         />
       ))}
     </ul>
   );
 }
-function SingleWatchedMovie({ movie, onDeleteWatched }) {
+function SingleWatchedMovie({ movie, onDeleteWatched, onSelectMovie }) {
   return (
-    <li key={movie.imdbID}>
+    <li key={movie.imdbID} onClick={() => onSelectMovie(movie.imdbID)}>
       <img src={movie.poster} alt={`${movie.title} poster`} />
       <h3>{movie.title}</h3>
       <div>

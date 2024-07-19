@@ -16,30 +16,35 @@ const KEY = "c989dcb0";
 export default function App() {
   const [query, setQuery] = useState("Green");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [error, setError] = useState("");
 
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
-  useEffect(() => {
-    // Retrieve data from local storage when the component mounts
-    const storedData = localStorage.getItem("myData");
-    if (storedData) {
-      setData(JSON.parse(storedData));
-      // setWatched(data);
-    }
-  }, []);
+  // const [watched, setWatched] = useState([]);
+  //!  another way for saving and getting data from local storage
+  const [watched, setWatched] = useState(function () {
+    const storedValue = localStorage.getItem("myData");
+    return JSON.parse(storedValue);
+  });
+  // useEffect(() => {
+  //   // Retrieve data from local storage when the component mounts
+  //   const storedData = localStorage.getItem("myData");
+  //   if (storedData) {
+  //     setData(JSON.parse(storedData));
+  //     // setWatched(data);
+  //   }
+  // }, []);
 
-  const addData = (newItem) => {
-    if (data.map((singleMOv) => singleMOv.imdbID).includes(newItem.imdbID)) {
-      return;
-    }
-    const updatedData = [...data, newItem];
-    setData(updatedData);
-    localStorage.setItem("myData", JSON.stringify(updatedData));
-  };
+  // const addData = (newItem) => {
+  //   if (data.map((singleMOv) => singleMOv.imdbID).includes(newItem.imdbID)) {
+  //     return;
+  //   }
+  // const updatedData = [...data, newItem];
+  // setData(updatedData);
+  // localStorage.setItem("myData", JSON.stringify(updatedData));
+  // };
 
   // ! http://www.omdbapi.com/?apikey=[yourkey]&
   // ?--> https://www.omdbapi.com/?i=tt3896198&apikey=c989dcb0
@@ -58,9 +63,9 @@ export default function App() {
   function handleDeleteMovie(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
     // setData((data) => data.filter((movie) => movie.imdbID !== id));
-    const newItems = data.filter((movie) => movie.imdbID !== id);
-    setData(newItems);
-    localStorage.setItem("myData", JSON.stringify(newItems));
+    // const newItems = data.filter((movie) => movie.imdbID !== id);
+    // setData(newItems);
+    // localStorage.setItem("myData", JSON.stringify(newItems));
   }
   // /// Event listener KeyPress ⤵️
   // useEffect(function () {
@@ -119,6 +124,12 @@ export default function App() {
     },
     [query]
   );
+  useEffect(
+    function () {
+      localStorage.setItem("myData", JSON.stringify(watched));
+    },
+    [watched]
+  );
   return (
     <>
       <Navbar>
@@ -138,7 +149,7 @@ export default function App() {
         <ReusableBox>
           {selectedId ? (
             <MovieDetails
-              addLocal={addData}
+              // addLocal={addData}
               watched={watched}
               selectedId={selectedId}
               onCloseMovie={handleCloseSelectedMovie}
@@ -150,7 +161,8 @@ export default function App() {
               <WatchedMoviesList
                 watched={watched}
                 setWatched={setWatched}
-                dataLocal={data}
+                // dataLocal={data}
+                onSelectMovie={handleSelectedMovie}
                 onDeleteMovie={handleDeleteMovie}
               />
             </>
