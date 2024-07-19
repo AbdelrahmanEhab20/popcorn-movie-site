@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 import Loader from "../Helpers/Loader";
 import ErrorMessage from "../Helpers/ErrorMessage";
+import { useKey } from "../hooks/useKey";
 const KEY = "c989dcb0";
 function MovieDetails({
   selectedId,
@@ -74,18 +75,9 @@ function MovieDetails({
     [selectedId]
   );
   /// Event listener KeyPress ⤵️
-  useEffect(function () {
-    function callback(e) {
-      if (e.code == "Escape") {
-        onCloseMovie();
-      }
-    }
-    document.addEventListener("keydown", callback);
+  useKey("Escape", onCloseMovie);
 
-    return function () {
-      document.removeEventListener("keydown", callback);
-    };
-  }, []);
+  // ! changing title of the website
   useEffect(
     function () {
       if (!title) return;
