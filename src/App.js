@@ -11,15 +11,19 @@ import ReusableBox from "./Helpers/ReusableBox";
 import Loader from "./Helpers/Loader";
 import ErrorMessage from "./Helpers/ErrorMessage";
 import MovieDetails from "./Components/MovieDetails";
+import { useMovies } from "./hooks/useMovies";
 
 const KEY = "c989dcb0";
 export default function App() {
-  const [query, setQuery] = useState("Green");
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
-  const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
 
+  const [selectedId, setSelectedId] = useState(null);
+
+  // ! calling our new custom HOOK
+  const { movies, isLoading, error } = useMovies(
+    query,
+    handleCloseSelectedMovie
+  );
   // const [data, setData] = useState([]);
 
   // const [watched, setWatched] = useState([]);
@@ -81,49 +85,7 @@ export default function App() {
   //   };
   // }, []);
   ///------
-  useEffect(
-    function () {
-      const controller = new AbortController();
-      async function fetchMovies() {
-        try {
-          setIsLoading(true);
-          setError("");
 
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-            { signal: controller.signal }
-          );
-
-          if (!res.ok)
-            throw new Error("Something went wrong with fetching movies");
-
-          const data = await res.json();
-          if (data.Response === "False") throw new Error("Movie not found !");
-
-          setMovies(data.Search);
-          setError("");
-        } catch (err) {
-          // setError(err.message);
-          if (err.name !== "AbortError") {
-            setError(err.message);
-          }
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      if (query.length < 3) {
-        setMovies([]);
-        setError("");
-        return;
-      }
-      handleCloseSelectedMovie();
-      fetchMovies();
-      return function () {
-        controller.abort();
-      };
-    },
-    [query]
-  );
   useEffect(
     function () {
       localStorage.setItem("myData", JSON.stringify(watched));
